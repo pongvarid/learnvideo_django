@@ -25,7 +25,7 @@ SECRET_KEY = 'f7^5*1atr&_292iajyd%eur$a38w9^1-gzx2asq47#vhyx3r=s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','0b438135db80.ngrok.io']
+ALLOWED_HOSTS = ['localhost','0b438135db80.ngrok.io','learnvideo.ga','www.learnvideo.ga']
 
 
 # Application definition

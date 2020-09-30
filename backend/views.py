@@ -1,9 +1,12 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from backend.serializers import AboutSerializer, VideoSerializer, ExerciseSerializer, AskAnswerSerializer, ScoreHistorySerializer
+from backend.serializers import AboutSerializer, VideoSerializer, ExerciseSerializer, AskAnswerSerializer, ScoreHistorySerializer, ScoreHistorySerializerRead
 from backend.models import About, Video, Exercise, AskAnswer, ScoreHistory
+from django.shortcuts import render
 
+def index(req):
+    return render(req,'index.html')
 
 class AboutAPIView(APIView):
 
@@ -132,11 +135,13 @@ class ExerciseAPIView(APIView):
 class ExerciseAPIListView(APIView):
 
     def get(self, request, format=None):
-        items = Exercise.objects.order_by('pk')
+        video_id = request.GET.get('video')
+        items = Exercise.objects.filter(video__id=video_id).order_by('pk')
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(items, request)
         serializer = ExerciseSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+        # return Response({"ss":video_id})
 
     def post(self, request, format=None):
         serializer = ExerciseSerializer(data=request.data)
@@ -179,7 +184,8 @@ class AskAnswerAPIView(APIView):
 class AskAnswerAPIListView(APIView):
 
     def get(self, request, format=None):
-        items = AskAnswer.objects.order_by('pk')
+        exercise_id = request.GET.get('exercise')
+        items = AskAnswer.objects.filter(exercise__id=exercise_id).order_by('pk')
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(items, request)
         serializer = AskAnswerSerializer(result_page, many=True)
@@ -226,10 +232,11 @@ class ScoreHistoryAPIView(APIView):
 class ScoreHistoryAPIListView(APIView):
 
     def get(self, request, format=None):
-        items = ScoreHistory.objects.order_by('pk')
+        user_id = request.GET.get('user')
+        items = ScoreHistory.objects.filter(user__id=user_id).order_by('pk')
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(items, request)
-        serializer = ScoreHistorySerializer(result_page, many=True)
+        serializer = ScoreHistorySerializerRead(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):

@@ -30,8 +30,13 @@ class AskAnswerSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class ScoreHistorySerializer(ModelSerializer):
+class ScoreHistorySerializer(ModelSerializer): 
+    class Meta:
+        model = ScoreHistory
+        fields = '__all__'
 
+class ScoreHistorySerializerRead(ModelSerializer):
+    exercise = ExerciseSerializer(read_only=True)
     class Meta:
         model = ScoreHistory
         fields = '__all__'
